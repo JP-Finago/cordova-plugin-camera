@@ -1231,7 +1231,12 @@ public class CameraLauncher extends CordovaPlugin implements MediaScannerConnect
                 id--;
             }
             Uri uri = Uri.parse(contentStore + "/" + id);
-            this.cordova.getActivity().getContentResolver().delete(uri, null, null);
+            try {
+                this.cordova.getActivity().getContentResolver().delete(uri, null, null);
+            } catch (Exception e) {
+                // On some devices and OS version combinations the delete() call may throw exception. Ignore it.
+                e.printStackTrace();
+            }
             cursor.close();
         }
     }
